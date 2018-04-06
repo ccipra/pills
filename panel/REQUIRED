@@ -1,0 +1,6 @@
+StaloneTray
+LemonBar
+'date' util
+bspwm's bspc
+
+This is a two panel setup aka a Gapped Panel and assumes you want to use both panels with bspwm.
