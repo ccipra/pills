@@ -17,24 +17,43 @@ deco_orange="FB3F04}"
 deco_purple="3C2637}"
 deco_green="859B47}"
 
-#bspwm vars
 #stat vars
-wifi_name=
+
+function battery(){
+	stat /usr/bin/acpi &> /dev/null
+	if [[ $? != 0 ]]
+	then
+		echo "ACPI client missing! ( sudo pacman -Syu acpi )" 1 > 2
+	else
+	BATSTAT=$(acpi | awk -F " " '{print $3}' | sed s/,//)
+	BATPERCENT=$(acpi | awk -F " " '{print $4}' | sed s/,//)
+	  if [[ $BATSTAT = "Charging" ]]
+	  then
+		BATSTAT='C'
+	  elif [[ $BATSTAT = 'Discharging' ]]
+	  then
+		BATSTAT='D'
+	  fi
+		echo -n " Bat[$BATSTAT]: $BATPERCENT"
+	fi
+}
+
 function color_reset() {
 	echo -n "%{F-}%{B-}"
 }
 
 function clock() {
-	TIME=$(date +"%r")
+	TIME=$(date +"%I:%M %p" | awk '{print toupper($0)}')
 	DATE=$(date +"%D")
 	echo -n " $DATE "
 	echo " $TIME "
-	color_reset
+	#color_reset
 }
 
 # Panel Loop
 while true; do
-	echo -n "%{l}"
+#	echo -n "%{l}"
+	echo -n "$(battery)"
 	echo -n "$(clock)"
 	sleep 1
 	echo
